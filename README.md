@@ -1,10 +1,10 @@
 # Proyecto Final - Grupo 1
 
 ## Integrantes
-- Esteban
-- Lorena
-- Juan
-- Ricardo
+- Esteban Nuñez
+- Lorena Elisabeth Sotelo
+- Juan Fabricio Milanesio
+- Ricardo David Godoy
 
 ## Instrucciones de instalación para el equipo
 
