@@ -5,6 +5,6 @@ app_name = 'posts'
 
 urlpatterns = [
     # Cuando alguien entre a /posts/ verá la lista
-    path('', listas_posts, name= 'listar_posts'),
+    path('', listar_posts, name= 'listar_posts'),
 ]
 

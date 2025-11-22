@@ -8,4 +8,4 @@ def listar_posts(request):
     # Busca todos los posts
     posts = Post.objects.all()
     # Renderizamos el html y le enviamos la lista de posts
-    return render(reqiest, 'lista_post.html', {'posts': posts})
+    return render(request, 'lista_post.html', {'posts': posts})
