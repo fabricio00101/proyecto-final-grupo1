@@ -1,24 +1,48 @@
-<!doctype html>
-<html lang="es">
-    <head>
-        <title>Noticias</title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
+{% extends 'base.html' %}
 
-    </head>
+{% block titulo %} Publicaciones {% endblock %}
 
-    <body>
-        <header>
-            <h1>Noticias </h1>
-        </header>
-        <main></main>
-        <footer>
-    
-        </footer>
-    
-    </body>
-</html>
+{% block contenido %}
+    <header class="row mb-4">
+        <div class="col-12">
+            <h2 class="border-bottom pb-2">Últimas publicaciones</h2>
+        </div>
+    </header>
+
+    <section class="row">
+        {% for post in posts %}
+            <div class="col-md-4 mb-4">
+                <article class="card h-100 shadow-sm">
+
+                    {% if post.imagen %}
+                        <img src="{{ post.imagen.url }}" class="card-img-top card-img-custom" alt="{{ post.titulo}}">
+                    {% else %}
+                        <div class="card-img-top card-placeholder">
+                            <span>Sin Imagen</span>
+                        </div>
+                    {% endif %}
+                    
+                    <diva class="card-body">
+                        <header>
+                            <h5 class="card-titule">{{ post.titulo }}</h5>
+                            {% if post.subitutlo %}
+                            <h6 class="card-subtitule mb-2 text-muted">{{ post.subtitulo }}</h6>
+                            {% endif %}
+
+                        </header>
+                        <p class="card-text">{{ post.texto|truncatewords:20 }}</p>
+                    </div>
+                    <footer class="card-footer bg-transparent border-top-0"><small class="text-muted">Publicado: {{ post.publicado|date:"d/m/Y" }}</small> 
+                    </footer>
+                </article> 
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    <h4>Aún no hay contenido.</h4>
+                    <p>Pronto subiremos las primeras novedades</p>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
