@@ -6,6 +6,8 @@ body{
 main{
     flex: 1;
 }
+
+
 .card-img-custom{
     height: 200px;
     width: 100%;
@@ -19,4 +21,9 @@ main{
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+}
+
+.navbar-nav .nav-link .nav-item{
+    text-decoration: none !important;
+    color: white !important; 
 }
