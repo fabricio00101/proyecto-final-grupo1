@@ -1,20 +1,21 @@
-body{
+body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-main{
+
+main {
     flex: 1;
 }
 
 
-.card-img-custom{
+.card-img-custom {
     height: 200px;
     width: 100%;
     object-fit: cover;
 }
 
-.card-placeholder{
+.card-placeholder {
     height: 200px;
     width: 100%;
     display: flex;
@@ -23,7 +24,14 @@ main{
     font-size: 1.2rem;
 }
 
-.navbar-nav .nav-link .nav-item{
+.navbar-nav .nav-link {
     text-decoration: none !important;
-    color: white !important; 
+    color: white !important;
+    font-weight: bold;
+}
+
+.nav-title {
+    text-decoration: none !important;
+    color: white !important;
+    font-weight: bold;
 }
