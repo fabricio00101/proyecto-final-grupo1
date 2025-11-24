@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en">
+{% load static %}<!doctype html>
+<html lang="es-ar">
     <head>
         <title>Title</title>
         <!-- Required meta tags -->
@@ -16,6 +16,7 @@
             integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
             crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="../static/style.css">
     </head>
 
     <body>
@@ -24,7 +25,7 @@
                 <div class="container">
                     <a href="{% url 'index'}">Blog</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"> <span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar collapse" id="navbarNav">
+                    <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
                                 <a href="{% url 'index' %}">Inicio</a>
@@ -41,7 +42,7 @@
             {% block contenido %}
             {% endblock %}
         </main>
-        <footer class="bg-dar text-white text-center py-3 mt-4">
+        <footer class="bg-dark text-white text-center py-3 mt-4">
             <div class="container">
                 <p class="mb-0">&copy; 2025 Proyecto Final - Grupo 1</p>
                 <small>Desarollado con Django</small>
