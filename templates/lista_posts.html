@@ -3,46 +3,44 @@
 {% block titulo %} Publicaciones {% endblock %}
 
 {% block contenido %}
-    <header class="row mb-4">
-        <div class="col-12">
-            <h2 class="border-bottom pb-2">Últimas publicaciones</h2>
-        </div>
+    
+    <header style="margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+        <h2>Últimas publicaciones</h2>
     </header>
 
-    <section class="row">
+    <section class="posts-grid">
         {% for post in posts %}
-            <div class="col-md-4 mb-4">
-                <article class="card h-100 shadow-sm">
-
-                    {% if post.imagen %}
-                        <img src="{{ post.imagen.url }}" class="card-img-top card-img-custom" alt="{{ post.titulo }}">
-                    {% else %}
-                        <div class="card-img-top card-placeholder">
-                            <span>Sin Imagen</span>
-                        </div>
+            <article class="post-card">
+                
+                {% if post.imagen %}
+                    <img src="{{ post.imagen.url }}" class="card-img-custom" alt="{{ post.titulo }}">
+                {% else %}
+                    <div class="card-placeholder">
+                        <span>Sin Imagen</span>
+                    </div>
+                {% endif %}
+                
+                <div class="card-content">
+                    <h3 class="card-title">{{ post.titulo }}</h3>
+                    
+                    {% if post.subtitulo %}
+                        <span class="card-subtitle">{{ post.subtitulo }}</span>
                     {% endif %}
                     
-                    <div class="card-body">
-                        <header>
-                            <h5 class="card-title">{{ post.titulo }}</h5>
-                            {% if post.subitutlo %}
-                            <h6 class="card-subtitle mb-2 text-muted">{{ post.subtitulo }}</h6>
-                            {% endif %}
-
-                        </header>
-                        <p class="card-text">{{ post.texto|truncatewords:20 }}</p>
-                    </div>
-                    <footer class="card-footer bg-transparent border-top-0"><small class="text-muted">Publicado: {{ post.publicado|date:"d/m/Y" }}</small> 
-                    </footer>
-                </article> 
-            </div>
-        {% empty %}
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    <h4>Aún no hay contenido.</h4>
-                    <p>Pronto subiremos las primeras novedades</p>
+                    <p>{{ post.texto|truncatewords:20 }}</p>
                 </div>
+                
+                <footer class="card-footer">
+                    Publicado: {{ post.publicado|date:"d/m/Y" }}
+                </footer>
+
+            </article> 
+        {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 20px; background: #fff; border-radius: 8px;">
+                <h3>Aún no hay contenido.</h3>
+                <p>Pronto subiremos las primeras novedades</p>
             </div>
         {% endfor %}
     </section>
+
 {% endblock %}
