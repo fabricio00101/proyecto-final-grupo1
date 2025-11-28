@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block titulo %} {{ post.titulo }} {% endblock %}
+
+{% block contenido %}
+
+
+    <article class="post-detail">
+        <header class="post-header">
+            <h1 class="post-title">{{ post.titulo }}</h1>
+            {% if post.subtitulo %}
+                <p class="post-subtitle"> {{ post. subtitulo }}</p>
+            {% endif %}
+
+            <p class="post-meta">
+                Categoría: {{ post.categoria }}
+                Fecha: {{ post.publicado|date:"d M Y" }}
+            </p>
+        </header>
+
+        {% if post.imagen %}
+            <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" class="post-img-large">
+        {% endif %}
+
+        <div class="post-body">
+            {{ post.texto|linebreaks }}
+        </div>
+
+        <footer class="post-footer">
+            <a href="{% url 'posts:listar_posts' %}" class="btn"> Volver a Noticias</a>
+        </footer>
+    </article>
+{% endlblock %}
