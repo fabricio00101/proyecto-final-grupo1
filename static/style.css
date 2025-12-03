@@ -339,3 +339,112 @@ a {
     border-color: var(--accent-color);
     font-weight: bold;
 }
+
+/* --- ESTILOS DE AUTENTICACIÓN (Login / Registro) --- */
+
+.auth-container {
+    max-width: 450px;       
+    margin: 40px auto;      
+    background-color: var(--bg-card);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
+}
+
+/* Cabecera del formulario */
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h2 {
+    color: var(--primary-dark);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.auth-header p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.auth-form p {
+    margin-bottom: 20px;
+}
+
+.auth-form label {
+    display: block;         
+    margin-bottom: 8px;
+    color: var(--text-main);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Inputs de texto y contraseña */
+.auth-form input[type="text"],
+.auth-form input[type="password"],
+.auth-form input[type="email"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--bg-body);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-family: inherit; /* Heredar la fuente Roboto */
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 206, 209, 0.1)
+}
+
+/* Textos de ayuda (ej: requisitos de contraseña) */
+.helptext {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+/* Lista de errores (si la contraseña es muy corta, etc) */
+.errorlist {
+    color: #e74c3c;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* Botón ancho completo */
+.btn-full {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 1.1rem;
+    padding: 12px;
+}
+
+/* Pie del formulario */
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.auth-footer a {
+    color: var(--accent-color);
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.auth-footer a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}

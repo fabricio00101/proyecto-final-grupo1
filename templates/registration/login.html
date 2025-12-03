@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Iniciar Sesión {% endblock %}
+
+{% block contenido %}
+
+    <section class="auth-container">
+        <headera class="auth-header">
+            <h2>Bienvenido de nuevo</h2>
+            <p>Ingresá tus credenciales para continuar</p>
+        </header>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <button type="submit" class="btn btn-full">Ingresar</button>
+        </form>
+        <footer class="auth-footer">
+            <p>¿No tenés cuentá? <a href="{% url 'registro' %}">Registrate acá</a></p>
+        </footer>
+    </section>
+{% endblock %}
+
+    

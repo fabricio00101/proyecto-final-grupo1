@@ -24,4 +24,8 @@ urlpatterns = [
     path('', index, name='index'),
 
     path('posts/', include('apps.posts.urls')),
+    # Rutas de Auth de Django (Login, Logout, Password Reset)
+    path ('auth/', include('django.contrib.auth.urls')),
+    # Rutas de la app usuarios (Registro)
+    path ('usuarios/', include('apps.usuarios.urls'))
 ]

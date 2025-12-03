@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block titulo %} Registro {% endblock %}
+{% block contenido %}
+
+    <section class="auth-container">
+        <header class="auth-header">
+            <h1>Unite a la comunidad</h1>
+            <p>Creá tu cuenta para empezar a publicar y comentar</p>
+        </header>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-full">Crear cuenta</button>
+        </form>
+        <footer class="auth-footer">
+            <p>¿Ya tenés cuenta? <a href="#">Iniciá sesión acá</a></p>
+        </footer>
+    </section>
+
+{% endblock %}
