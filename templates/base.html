@@ -1,12 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block titulo %} Blog Grupo 1 {% endblock %}</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
+
 <body>
 
     <header class="main-nav">
@@ -16,6 +18,20 @@
                 <ul class="nav-links">
                     <li><a href="{% url 'index' %}">Inicio</a></li>
                     <li><a href="{% url 'posts:listar_posts' %}">Publicaciones</a></li>
+                    {% if user.is_authenticated %}
+                        <li><span>Hola, {{ user.username }}</span></li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    style="background:none; border:none; color:inherit; cursor:pointer; font:inherit;">Cerrar
+                                    Sesión</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                        <li><a href="{% url 'usuarios:registro' %}">Registrarse</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
@@ -34,4 +50,5 @@
     </footer>
 
 </body>
+
 </html>

@@ -17,15 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .views import index
-
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
 
     path('posts/', include('apps.posts.urls')),
+    
+    # Login
+    path('auth/login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
     # Rutas de Auth de Django (Login, Logout, Password Reset)
-    path ('auth/', include('django.contrib.auth.urls')),
+    path('auth/', include('django.contrib.auth.urls')),
     # Rutas de la app usuarios (Registro)
-    path ('usuarios/', include('apps.usuarios.urls'))
+    path('usuarios/', include('apps.usuarios.urls'))
 ]
+    
