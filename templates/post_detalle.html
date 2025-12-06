@@ -29,4 +29,39 @@
             <a href="{% url 'posts:listar_posts' %}" class="btn"> Volver a Noticias</a>
         </footer>
     </article>
+    <hr>
+    <section class="comments-section">
+        <h3>Comentarios</h3>
+
+        <div class="comment-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'posts:comentario_create' post.id}" class="btn">Dejar un comentario</a>
+            {% else %}
+                <p>Tenés que <a href="{% url 'login' %}">iniciar sesión</a> para comentar.</p>
+            {% endif %}
+        </div>
+        
+        <div class="comments-list">
+            {% for comentario in comentarios %}
+                <article class="comment-card">
+                    <header class="comment-header">
+                        <strong>{{ comentario.autor }}</strong>
+                        <time datetime="{{ comentario.fecha|date: 'Y-m-d' }}">- {{ comentario.fecha|date:"d/m/Y H:i" }}</time>
+                    </header>
+                    <div class="comment-body">
+                        <p>{{ comentario.texto }}</p>
+                    </div>
+                    {% if user == comentario.autor or user.is_staff %}
+                        <footer class="comment-footer">
+                            <a href="{% url 'posts:comentario_update' comentario.id %}">Editar</a>
+                            <a href="{% url 'posts:comentario_delete' comentario.id %}">Eliminar</a>
+                        </footer>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p class="no-comments">No hay comentarios aún. ¡Sé el primero!</p>
+            {% endfor %}
+        </div>
+
+    </section>
 {% endlblock %}
