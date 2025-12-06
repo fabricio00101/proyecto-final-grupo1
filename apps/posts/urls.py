@@ -1,27 +1,27 @@
 from django.urls import path
 from .views import (
-    listar_posts, post_detalle, 
-    PostCreateView, PostUpdateView, PostDeleteView,
+    listar_publicaciones, detalle_publicacion, 
+    PublicacionCreateView, PublicacionUpdateView, PublicacionDeleteView,
     ComentarioCreateView, ComentarioUpdateView, ComentarioDeleteView
 )
 
 
-app_name = 'posts'
+app_name = 'publicaciones'
 
 urlpatterns = [
-    # Cuando alguien entre a /posts/ verá la lista
-    path('', listar_posts, name = 'listar_posts'),
-    path('detalle/<int:id>/', post_detalle, name = 'post_detalle'),
+    # Cuando alguien entre a /publicaciones/ verá la lista
+    path('', listar_publicaciones, name='listar'),
+    path('detalle/<int:id>/', detalle_publicacion, name='detalle'),
     
-    # CRUD Post
-    path('nuevo/', PostCreateView.as_view(), name='post_create'),
-    path('editar/<int:pk>/', PostUpdateView.as_view(), name='post_update'),
-    path('eliminar/<int:pk>/', PostDeleteView.as_view(), name='post_delete'),
+    # CRUD Publicación
+    path('nueva/', PublicacionCreateView.as_view(), name='crear'),
+    path('editar/<int:id>/', PublicacionUpdateView.as_view(), name='editar'),
+    path('eliminar/<int:id>/', PublicacionDeleteView.as_view(), name='eliminar'),
 
     # CRUD Comentario
-    path('detalle/<int:pk>/comentar/', ComentarioCreateView.as_view(), name='comentario_create'),
-    path('comentario/editar/<int:pk>/', ComentarioUpdateView.as_view(), name='comentario_update'),
-    path('comentario/eliminar/<int:pk>/', ComentarioDeleteView.as_view(), name='comentario_delete'),
+    path('detalle/<int:id>/comentar/', ComentarioCreateView.as_view(), name='comentario_crear'),
+    path('comentario/editar/<int:id>/', ComentarioUpdateView.as_view(), name='comentario_editar'),
+    path('comentario/eliminar/<int:id>/', ComentarioDeleteView.as_view(), name='comentario_eliminar'),
 
 ]
 

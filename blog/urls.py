@@ -23,12 +23,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
 
-    path('posts/', include('apps.posts.urls')),
+    path('publicaciones/', include('apps.posts.urls')),
     
-    # Login
-    path('auth/login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
-    # Rutas de Auth de Django (Login, Logout, Password Reset)
-    path('auth/', include('django.contrib.auth.urls')),
+    # Autenticación
+    path('autenticacion/iniciar-sesion/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='iniciar_sesion'),
+    # Rutas de Auth de Django (Cerrar sesión, Cambio de contraseña, etc.)
+    path('autenticacion/', include('django.contrib.auth.urls')),
     # Rutas de la app usuarios (Registro)
     path('usuarios/', include('apps.usuarios.urls'))
 ]

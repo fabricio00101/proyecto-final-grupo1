@@ -17,8 +17,11 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="{% url 'index' %}">Inicio</a></li>
-                    <li><a href="{% url 'posts:listar_posts' %}">Publicaciones</a></li>
+                    <li><a href="{% url 'publicaciones:listar' %}">Publicaciones</a></li>
                     {% if user.is_authenticated %}
+                        {% if pertenece_a_colaboradores or user.is_superuser %}
+                            <li><a href="{% url 'publicaciones:crear' %}" class="btn-crear-nav" title="Crear nueva publicación">➕ Nueva Publicación</a></li>
+                        {% endif %}
                         <li><span>Hola, {{ user.username }}</span></li>
                         <li>
                             <form action="{% url 'logout' %}" method="post" style="display:inline;">
@@ -29,8 +32,8 @@
                             </form>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
-                        <li><a href="{% url 'usuarios:registro' %}">Registrarse</a></li>
+                        <li><a href="{% url 'iniciar_sesion' %}">Iniciar Sesión</a></li>
+                        <li><a href="{% url 'usuarios:registrarse' %}">Registrarse</a></li>
                     {% endif %}
                 </ul>
             </nav>

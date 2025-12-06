@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Publicaciones {% endblock %}
+
+{% block contenido %}
+
+<header class="page-header">
+    <h2>Últimas publicaciones</h2>
+</header>
+
+<nav class="filters-nav">
+    <div class="filter-group">
+        <span class="filter-label">Categorías:</span>
+        <a href="{% url 'publicaciones:listar' %}" class="filter-btn">
+            Todas</a>
+        {% for cat in categorias %}
+            <a href="?categoria={{ cat.id }}" class="filter-btn">
+                {{ cat.nombre }}</a>
+        {% endfor %}
+    </div>
+    <div class="filter-group">
+        <span class="filter-label">Ordenar:</span>
+        <a href="?orden=-publicado" class="filter-btn">Recientes</a>
+        <a href="?orden=antiguo" class="filter-btn">Antiguos</a>
+        <a href="?orden=alfabetico" class="filter-btn">A-Z</a>
+        <a href="?orden=alfabetico_inv" class="filter-btn">Z-A</a>
+    </div>
+</nav>
+
+<section class="posts-grid">
+    {% for publicacion in publicaciones %}
+    <article class="post-card">
+
+        {% if publicacion.imagen %}
+            <img src="{{ publicacion.imagen.url }}" class="card-img-custom" alt="{{ publicacion.titulo }}">
+        {% else %}
+            <div class="post-image-placeholder">
+                <span>Sin Imagen</span>
+            </div>
+        {% endif %}
+
+        <div class="post-content">
+            <header class="post-header">
+                <a href="{% url 'publicaciones:detalle' publicacion.id %}" class="post-link">
+                    <h3 class="post-title">{{ publicacion.titulo }}</h3>
+                </a>
+                {% if publicacion.subtitulo %}
+                    <h4 class="post-subtitle">{{ publicacion.subtitulo }}</h4>
+                {% endif %}
+            </header>
+            <p class="post-excerpt">{{ publicacion.texto|truncatewords:20 }}</p>
+            <footer class="card-footer">
+                Publicado: {{ publicacion.publicado|date:"d/m/Y" }}
+            </footer>
+        </div>
+
+
+    </article>
+    {% empty %}
+        <div class="no-content">
+            <h3>Aún no hay contenido.</h3>
+            <p>Pronto subiremos las primeras novedades</p>
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}

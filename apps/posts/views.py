@@ -6,51 +6,51 @@ from django.urls import reverse_lazy
 
 # Create your views here.
 
-# Esta función busca los posts en la base de datos y los manda al HTML
-def listar_posts(request):
-    # Busca todos los posts
-    posts = Post.objects.all()
+# Esta función busca las publicaciones en la base de datos y las manda al HTML
+def listar_publicaciones(request):
+    # Busca todas las publicaciones
+    publicaciones = Post.objects.all()
 
     # Sistema de filtrado por categoría
     categoria_id = request.GET.get('categoria')
     if categoria_id:
-        posts = posts.filter(categoria_id=categoria_id)
+        publicaciones = publicaciones.filter(categoria_id=categoria_id)
 
     # Sistema de ordenamiento
     orden = request.GET.get('orden')
     if orden == 'antiguo':
-        posts = posts.order_by('publicado') #Acendente
+        publicaciones = publicaciones.order_by('publicado') #Ascendente
     elif orden == 'alfabetico':
-        posts = posts.order_by('titulo') # A-Z
+        publicaciones = publicaciones.order_by('titulo') # A-Z
     elif orden == 'alfabetico_inv':
-        posts = posts.order_by('-titulo') # Z-A
+        publicaciones = publicaciones.order_by('-titulo') # Z-A
     else:
-        posts = posts.order_by('-publicado') #Por defecto: Recientes primero
+        publicaciones = publicaciones.order_by('-publicado') #Por defecto: Recientes primero
 
     categorias = Categoria.objects.all()
 
     contexto = {
-        'posts': posts,
+        'publicaciones': publicaciones,
         'categorias': categorias,
     }
-    return render(request, 'lista_posts.html', contexto)
+    return render(request, 'lista_publicaciones.html', contexto)
 
 
-def post_detalle(request, id):
-    post = get_object_or_404(Post, id=id)
-    comentarios = post.comentarios.all()
+def detalle_publicacion(request, id):
+    publicacion = get_object_or_404(Post, id=id)
+    comentarios = publicacion.comentarios.all()
     contexto={
-        'post': post,
+        'publicacion': publicacion,
         'comentarios': comentarios
     }
-    return render(request, 'post_detalle.html', contexto)
+    return render(request, 'detalle_publicacion.html', contexto)
 
-# Vistas para Post
+# Vistas para Publicación
 
-class PostCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class PublicacionCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Post
     fields = ['titulo', 'subtitulo', 'texto', 'categoria', 'imagen']
-    template_name = 'post_form.html'
+    template_name = 'publicacion_form.html'
     success_url = reverse_lazy('index')
 
     def form_valid(self, form):
@@ -60,24 +60,26 @@ class PostCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def test_func(self):
         return self.request.user.groups.filter(name='Colaborador').exists() or self.request.user.is_superuser
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PublicacionUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['titulo', 'subtitulo', 'texto', 'categoria', 'imagen', 'activo']
-    template_name = 'post_form.html'
+    template_name = 'publicacion_form.html'
     success_url = reverse_lazy('index')
+    pk_url_kwarg = 'id'
 
     def test_func(self):
-        post = self.get_object()
-        return (self.request.user == post.autor and self.request.user.groups.filter(name='Colaborador').exists()) or self.request.user.is_superuser
+        publicacion = self.get_object()
+        return (self.request.user == publicacion.autor and self.request.user.groups.filter(name='Colaborador').exists()) or self.request.user.is_superuser
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PublicacionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
-    template_name = 'post_confirm_delete.html'
+    template_name = 'publicacion_confirm_delete.html'
     success_url = reverse_lazy('index')
+    pk_url_kwarg = 'id'
 
     def test_func(self):
-        post = self.get_object()
-        return (self.request.user == post.autor and self.request.user.groups.filter(name='Colaborador').exists()) or self.request.user.is_superuser
+        publicacion = self.get_object()
+        return (self.request.user == publicacion.autor and self.request.user.groups.filter(name='Colaborador').exists()) or self.request.user.is_superuser
 
 # Vistas para Comentario
 
@@ -88,34 +90,45 @@ class ComentarioCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.autor = self.request.user
-        form.instance.post_id = self.kwargs['pk']
+        form.instance.post_id = self.kwargs['id']
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse_lazy('post_detalle', kwargs={'id': self.kwargs['pk']})
+        return reverse_lazy('publicaciones:detalle', kwargs={'id': self.kwargs['id']})
 
 class ComentarioUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comentario
     fields = ['texto']
     template_name = 'comentario_form.html'
+    pk_url_kwarg = 'id'
 
     def test_func(self):
         comentario = self.get_object()
         return self.request.user == comentario.autor
 
     def get_success_url(self):
-        return reverse_lazy('post_detalle', kwargs={'id': self.object.post.id})
+        return reverse_lazy('publicaciones:detalle', kwargs={'id': self.object.post.id})
 
 class ComentarioDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comentario
     template_name = 'comentario_confirm_delete.html'
+    pk_url_kwarg = 'id'
 
     def test_func(self):
         comentario = self.get_object()
-        # Puede borrar el autor del comentario O el autor del post (Colaborador)
+        # Un usuario puede eliminar un comentario si:
+        # 1. Es el autor del comentario Y es Colaborador (puede eliminar sus propios comentarios)
+        # 2. Es el autor de la publicación Y es Colaborador (puede eliminar comentarios en sus publicaciones)
+        # 3. Es superuser (admin tiene permisos totales)
+        
         es_autor_comentario = self.request.user == comentario.autor
-        es_autor_post = self.request.user == comentario.post.autor
-        return es_autor_comentario or es_autor_post
+        es_autor_publicacion = self.request.user == comentario.post.autor
+        es_colaborador = self.request.user.groups.filter(name='Colaborador').exists()
+        es_superuser = self.request.user.is_superuser
+        
+        # Puede eliminar si es superuser, O si es colaborador Y (es autor del comentario O autor de la publicación)
+        return es_superuser or (es_colaborador and (es_autor_comentario or es_autor_publicacion))
 
     def get_success_url(self):
-        return reverse_lazy('post_detalle', kwargs={'id': self.object.post.id})
+        return reverse_lazy('publicaciones:detalle', kwargs={'id': self.object.post.id})
+
