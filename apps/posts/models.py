@@ -20,6 +20,8 @@ class Post(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, default='Sin categoría')
     imagen = models.ImageField(null=True, blank= True, upload_to='media', default='static/post_default.png')
     publicado = models.DateTimeField(default=timezone.now)
+    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, blank=True)
+
 
     class Meta:
         ordering = ('-publicado',)
@@ -30,3 +32,12 @@ class Post(models.Model):
     def delete(self, using = None, keep_parents = False):
         self.imagen.delete(self.imagen.name)
         super().delete()
+
+class Comentario(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comentarios')
+    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    texto = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comentario de {self.autor} en {self.post}"

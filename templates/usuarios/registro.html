@@ -5,16 +5,204 @@
     <section class="auth-container">
         <header class="auth-header">
             <h1>Unite a la comunidad</h1>
-            <p>Creá tu cuenta para empezar a publicar y comentar</p>
+            <p>Creá tu cuenta para empezar a participar en la plataforma</p>
         </header>
+
         <form method="post" class="auth-form">
             {% csrf_token %}
-            {{ form.as_p }}
+            
+            <!-- Campos básicos -->
+            <div class="form-group">
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="form-errors">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="form-errors">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="form-errors">{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="form-errors">{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Sección de selección de perfil -->
+            <div class="form-group perfil-section">
+                <label class="form-label">{{ form.perfil.label }}</label>
+                
+                <div class="perfil-options">
+                    {% for radio in form.perfil %}
+                        <div class="perfil-option">
+                            <div class="radio-wrapper">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}" class="radio-label">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                            
+                            <!-- Descripciones según el tipo de perfil -->
+                            {% if radio.data == 'miembro' %}
+                                <div class="perfil-description">
+                                    <p>Como <strong>Miembro</strong> podrás:</p>
+                                    <ul>
+                                        <li>✓ Navegar por todos los artículos</li>
+                                        <li>✓ Comentar en las publicaciones</li>
+                                        <li>✓ Editar tus comentarios</li>
+                                        <li>✓ Eliminar tus comentarios</li>
+                                    </ul>
+                                </div>
+                            {% elif radio.data == 'colaborador' %}
+                                <div class="perfil-description">
+                                    <p>Como <strong>Colaborador</strong> podrás:</p>
+                                    <ul>
+                                        <li>✓ Hacer todo lo que hace un Miembro</li>
+                                        <li>✓ Crear nuevos artículos</li>
+                                        <li>✓ Editar tus artículos</li>
+                                        <li>✓ Eliminar tus artículos</li>
+                                        <li>✓ Categorizar tus contenidos</li>
+                                        <li>✓ Eliminar comentarios en tus artículos</li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                {% if form.perfil.errors %}
+                    <div class="form-errors">{{ form.perfil.errors }}</div>
+                {% endif %}
+            </div>
+
             <button type="submit" class="btn btn-full">Crear cuenta</button>
         </form>
+
         <footer class="auth-footer">
-            <p>¿Ya tenés cuenta? <a href="{% url 'login' %}">Iniciá sesión acá</a></p>
+            <p>¿Ya tenés cuenta? <a href="{% url 'iniciar_sesion' %}">Iniciá sesión acá</a></p>
         </footer>
     </section>
+
+    <style>
+        .perfil-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .perfil-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .perfil-option {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .perfil-option input[type="radio"]:checked + .radio-label {
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        .perfil-option input[type="radio"]:checked ~ .perfil-description {
+            display: block;
+        }
+
+        .perfil-option:has(input[type="radio"]:checked) {
+            border-color: #0066cc;
+            background-color: #f0f4ff;
+        }
+
+        .radio-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-wrapper input[type="radio"] {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .radio-label {
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .perfil-description {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #ccc;
+            animation: slideIn 0.3s ease;
+        }
+
+        .perfil-description p {
+            margin: 0 0 0.75rem 0;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .perfil-description ul {
+            margin: 0;
+            padding-left: 1.5rem;
+            list-style: none;
+        }
+
+        .perfil-description li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-errors {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .perfil-option {
+                padding: 1rem;
+            }
+
+            .perfil-description {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 
 {% endblock %}

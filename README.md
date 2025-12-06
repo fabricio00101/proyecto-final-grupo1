@@ -8,17 +8,38 @@
 
 ## Instrucciones de instalación para el equipo
 
-1. Clonar el repositorio.
-2. Crear un entorno virtual:
+1. Clonar el repositorio. 
+```bash
+git clone https://github.com/fabricio00101/proyecto-final-grupo1.git
+```
+
+2. Ingresar a la carpeta proyecto-final-grupo1
+```bash
+cd proyecto-final-grupo1
+```
+
+3. Crear un entorno virtual:
    `python -m venv .venv`
-3. Activar el entorno:
+
+4. Activar el entorno:
    - Windows: `.\.venv\Scripts\activate`
    - Mac/Linux: `source .venv/bin/activate`
-4. Instalar dependencias:
+
+5. Instalar dependencias:
    `pip install -r requirements.txt`
-5. Realizar migraciones (necesario porque la DB no se sube):
+
+6. Crear un archivo llamado .env en la carpeta actual
+```bash
+DATABASE_URL=cadena-de-conexión-a-la-bd
+```
+
+7. Realizar migraciones (necesario porque la DB no se sube):
    `python manage.py migrate`
-6. Crear un superusuario propio:
+
+8. Crear un superusuario propio:
    `python manage.py createsuperuser`
-7. Correr el servidor:
+
+9. Correr el servidor:
    `python manage.py runserver`
+
+10. Ingresar en el navegador a http://127.0.0.1:8000   

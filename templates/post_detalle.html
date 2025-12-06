@@ -3,17 +3,19 @@
 
 {% block contenido %}
 
-
     <article class="post-detail">
         <header class="post-header">
             <h1 class="post-title">{{ post.titulo }}</h1>
             {% if post.subtitulo %}
-                <p class="post-subtitle"> {{ post. subtitulo }}</p>
+                <p class="post-subtitle">{{ post.subtitulo }}</p>
             {% endif %}
 
             <p class="post-meta">
                 Categoría: {{ post.categoria }}
                 Fecha: {{ post.publicado|date:"d M Y" }}
+                {% if post.autor %}
+                    | Autor: {{ post.autor.username }}
+                {% endif %}
             </p>
         </header>
 
@@ -25,8 +27,16 @@
             {{ post.texto|linebreaks }}
         </div>
 
+        <!-- Botones de edición/eliminación para colaboradores -->
+        {% if user.is_authenticated and user == post.autor and user.is_superuser %}
+            <div class="post-actions">
+                <a href="{% url 'posts:post_update' post.id %}" class="btn btn-secondary">✏️ Editar</a>
+                <a href="{% url 'posts:post_delete' post.id %}" class="btn btn-danger">🗑️ Eliminar</a>
+            </div>
+        {% endif %}
+
         <footer class="post-footer">
-            <a href="{% url 'posts:listar_posts' %}" class="btn"> Volver a Noticias</a>
+            <a href="{% url 'posts:listar_posts' %}" class="btn">← Volver a Noticias</a>
         </footer>
     </article>
     <hr>

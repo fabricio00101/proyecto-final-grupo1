@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% block titulo %} {{ publicacion.titulo }} {% endblock %}
+
+{% block contenido %}
+
+    <article class="post-detail">
+        <header class="post-header">
+            <h1 class="post-title">{{ publicacion.titulo }}</h1>
+            {% if publicacion.subtitulo %}
+                <p class="post-subtitle">{{ publicacion.subtitulo }}</p>
+            {% endif %}
+
+            <p class="post-meta">
+                Categoría: {{ publicacion.categoria }}
+                Fecha: {{ publicacion.publicado|date:"d M Y" }}
+                {% if publicacion.autor %}
+                    | Autor: {{ publicacion.autor.username }}
+                {% endif %}
+            </p>
+        </header>
+
+        {% if publicacion.imagen %}
+            <img src="{{ publicacion.imagen.url }}" alt="{{ publicacion.titulo }}" class="post-img-large">
+        {% endif %}
+
+        <div class="post-body">
+            {{ publicacion.texto|linebreaks }}
+        </div>
+
+        <!-- Botones de edición/eliminación para colaboradores -->
+        {% if user.is_authenticated and user == publicacion.autor and user.is_superuser %}
+            <div class="post-actions">
+                <a href="{% url 'publicaciones:editar' publicacion.id %}" class="btn btn-secondary">✏️ Editar</a>
+                <a href="{% url 'publicaciones:eliminar' publicacion.id %}" class="btn btn-danger">🗑️ Eliminar</a>
+            </div>
+        {% endif %}
+
+        <footer class="post-footer">
+            <a href="{% url 'publicaciones:listar' %}" class="btn">← Volver a Publicaciones</a>
+        </footer>
+    </article>
+
+    <!-- Sección de Comentarios -->
+    <section class="comments-section">
+        <header class="comments-header">
+            <h2>Comentarios ({{ comentarios|length }})</h2>
+        </header>
+
+        <!-- Formulario para comentar (solo usuarios autenticados) -->
+        {% if user.is_authenticated %}
+            <div class="comment-form-wrapper">
+                <h3>Deja tu comentario</h3>
+                <form method="post" action="{% url 'publicaciones:comentario_crear' publicacion.id %}" class="comment-form">
+                    {% csrf_token %}
+                    <textarea name="texto" placeholder="Escribe tu comentario aquí..." rows="4" required></textarea>
+                    <button type="submit" class="btn btn-primary">Publicar comentario</button>
+                </form>
+            </div>
+        {% else %}
+            <div class="comment-login-prompt">
+                <p>Para comentar debes <a href="{% url 'iniciar_sesion' %}">iniciar sesión</a> o <a href="{% url 'usuarios:registrarse' %}">registrarte</a></p>
+            </div>
+        {% endif %}
+
+        <!-- Lista de comentarios -->
+        <div class="comments-list">
+            {% if comentarios %}
+                {% for comentario in comentarios %}
+                    <div class="comment">
+                        <header class="comment-header">
+                            <strong>{{ comentario.autor.username }}</strong>
+                            <span class="comment-date">{{ comentario.fecha|date:"d/m/Y H:i" }}</span>
+                        </header>
+                        
+                        <div class="comment-body">
+                            {{ comentario.texto|linebreaks }}
+                        </div>
+
+                        <!-- Botones de edición/eliminación -->
+                        {% if user.is_authenticated %}
+                            <footer class="comment-footer">
+                                {% if user == comentario.autor %}
+                                    <a href="{% url 'publicaciones:comentario_editar' comentario.id %}" class="btn-link">Editar</a>
+                                    <a href="{% url 'publicaciones:comentario_eliminar' comentario.id %}" class="btn-link btn-danger">Eliminar</a>
+                                {% elif user == publicacion.autor and pertenece_a_colaboradores or user.is_superuser %}
+                                    <a href="{% url 'publicaciones:comentario_eliminar' comentario.id %}" class="btn-link btn-danger">Eliminar comentario</a>
+                                {% endif %}
+                            </footer>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-comments">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <style>
+        .post-detail {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .post-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+
+        .post-title {
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+
+        .post-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin: 0 0 1rem 0;
+            font-style: italic;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: #999;
+            margin: 0;
+        }
+
+        .post-img-large {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .post-body {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+            margin: 2rem 0;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .post-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        /* Comentarios */
+        .comments-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .comments-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comments-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .comment-form-wrapper {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .comment-form-wrapper h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .comment-form textarea {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+        }
+
+        .comment-login-prompt {
+            background: #fff3cd;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #ffc107;
+        }
+
+        .comment-login-prompt p {
+            margin: 0;
+            color: #333;
+        }
+
+        .comment-login-prompt a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .comment {
+            border-left: 4px solid #ddd;
+            padding: 1rem;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .comment-header strong {
+            color: #0066cc;
+        }
+
+        .comment-date {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .comment-body {
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
+        }
+
+        .comment-footer {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: #0066cc;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 0;
+            font-size: inherit;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-link.btn-danger {
+            color: #dc3545;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #999;
+            padding: 2rem 0;
+            font-style: italic;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: #0066cc;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0052a3;
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .post-detail {
+                padding: 1rem;
+            }
+
+            .post-title {
+                font-size: 1.5rem;
+            }
+
+            .comment-header {
+                flex-direction: column;
+            }
+
+            .post-actions {
+                flex-direction: column;
+            }
+
+            .post-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+
+{% endblock %}
