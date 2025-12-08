@@ -28,7 +28,7 @@
         </div>
 
         <!-- Botones de edición/eliminación para colaboradores -->
-        {% if user.is_authenticated and user == publicacion.autor and user.is_superuser %}
+        {% if user.is_authenticated and user == publicacion.autor and pertenece_a_colaboradores or user.is_superuser %}
             <div class="post-actions">
                 <a href="{% url 'publicaciones:editar' publicacion.id %}" class="btn btn-secondary">✏️ Editar</a>
                 <a href="{% url 'publicaciones:eliminar' publicacion.id %}" class="btn btn-danger">🗑️ Eliminar</a>

@@ -6,6 +6,9 @@
 
 <header class="page-header">
     <h2>Últimas publicaciones</h2>
+    {% if user.is_authenticated and pertenece_a_colaboradores or user.is_superuser %}
+    <a href="{% url 'publicaciones:crear' %}" class="btn btn-primary" style="margin-left: auto;">+ Nueva Publicación</a>
+    {% endif %}
 </header>
 
 <nav class="filters-nav">
@@ -14,8 +17,8 @@
         <a href="{% url 'publicaciones:listar' %}" class="filter-btn">
             Todas</a>
         {% for cat in categorias %}
-            <a href="?categoria={{ cat.id }}" class="filter-btn">
-                {{ cat.nombre }}</a>
+        <a href="?categoria={{ cat.id }}" class="filter-btn">
+            {{ cat.nombre }}</a>
         {% endfor %}
     </div>
     <div class="filter-group">
@@ -32,11 +35,11 @@
     <article class="post-card">
 
         {% if publicacion.imagen %}
-            <img src="{{ publicacion.imagen.url }}" class="card-img-custom" alt="{{ publicacion.titulo }}">
+        <img src="{{ publicacion.imagen.url }}" class="card-img-custom" alt="{{ publicacion.titulo }}">
         {% else %}
-            <div class="post-image-placeholder">
-                <span>Sin Imagen</span>
-            </div>
+        <div class="post-image-placeholder">
+            <span>Sin Imagen</span>
+        </div>
         {% endif %}
 
         <div class="post-content">
@@ -45,7 +48,7 @@
                     <h3 class="post-title">{{ publicacion.titulo }}</h3>
                 </a>
                 {% if publicacion.subtitulo %}
-                    <h4 class="post-subtitle">{{ publicacion.subtitulo }}</h4>
+                <h4 class="post-subtitle">{{ publicacion.subtitulo }}</h4>
                 {% endif %}
             </header>
             <p class="post-excerpt">{{ publicacion.texto|truncatewords:20 }}</p>
@@ -57,10 +60,10 @@
 
     </article>
     {% empty %}
-        <div class="no-content">
-            <h3>Aún no hay contenido.</h3>
-            <p>Pronto subiremos las primeras novedades</p>
-        </div>
+    <div class="no-content">
+        <h3>Aún no hay contenido.</h3>
+        <p>Pronto subiremos las primeras novedades</p>
+    </div>
     {% endfor %}
 </section>
 {% endblock %}

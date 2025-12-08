@@ -126,8 +126,8 @@ class ComentarioDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         es_colaborador = self.request.user.groups.filter(name='Colaborador').exists()
         es_superuser = self.request.user.is_superuser
         
-        # Puede eliminar si es superuser, O si es colaborador Y (es autor del comentario O autor de la publicación)
-        return es_superuser or (es_colaborador and (es_autor_comentario or es_autor_publicacion))
+        # Puede eliminar si es superuser, O es autor del comentario (cualquier rol), O es colaborador y autor del post
+        return es_superuser or es_autor_comentario or (es_colaborador and es_autor_publicacion)
 
     def get_success_url(self):
         return reverse_lazy('publicaciones:detalle', kwargs={'id': self.object.post.id})

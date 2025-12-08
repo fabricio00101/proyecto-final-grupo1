@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 class RegistroForm(UserCreationForm):
     """Formulario personalizado de registro con opción de perfil"""
