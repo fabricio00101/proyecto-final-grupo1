@@ -11,10 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-import dj_database_url
-from dotenv import load_dotenv
 
-load_dotenv()
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -81,27 +79,15 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# --- CONFIGURACIÓN DE BASE DE DATOS HÍBRIDA ---
+# Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# 1. Configuración por defecto: SQLite (Para tu PC local)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# 2. Configuración para Producción (Si existe DATABASE_URL, la usa)
-import dj_database_url
-db_from_env = dj_database_url.config(
-    default=os.getenv('DATABASE_URL'),
-    conn_max_age=600,
-    conn_health_checks=True,
-)
-
-# Si dj_database_url encontró una configuración válida (no vacía), actualizamos
-if db_from_env:
-    DATABASES['default'].update(db_from_env)
 
 
 # Password validation
