@@ -59,9 +59,24 @@ class RegistroForm(UserCreationForm):
         return email
     
     def save(self, commit=True):
-        """Guardar usuario con email"""
+        """Guardar usuario y asignar grupo según elección"""
         user = super().save(commit=False)
         user.email = self.cleaned_data['email']
+        
         if commit:
             user.save()
+            
+            # Asignación de Grupo
+            perfil_seleccionado = self.cleaned_data.get('perfil')
+            try:
+                if perfil_seleccionado == 'colaborador':
+                    grupo = Group.objects.get(name='Colaborador')
+                else:
+                    grupo = Group.objects.get(name='Miembro')
+                
+                user.groups.add(grupo)
+            except Group.DoesNotExist:
+                # Fallback seguro si los grupos no existen (aunque deberían)
+                pass
+                
         return user
