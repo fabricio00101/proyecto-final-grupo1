@@ -79,11 +79,9 @@
                         <!-- Botones de edición/eliminación -->
                         {% if user.is_authenticated %}
                             <footer class="comment-footer">
-                                {% if user == comentario.autor %}
-                                    <a href="{% url 'publicaciones:comentario_editar' comentario.id %}" class="btn-link">Editar</a>
-                                    <a href="{% url 'publicaciones:comentario_eliminar' comentario.id %}" class="btn-link btn-danger">Eliminar</a>
-                                {% elif user == publicacion.autor and pertenece_a_colaboradores or user.is_superuser %}
-                                    <a href="{% url 'publicaciones:comentario_eliminar' comentario.id %}" class="btn-link btn-danger">Eliminar comentario</a>
+                                {% if user == comentario.autor or user == publicacion.autor or user.is_superuser %}
+                                    <a href="{% url 'publicaciones:comentario_editar' comentario.id %}" class="btn btn-secondary">✏️ Editar</a>
+                                    <a href="{% url 'publicaciones:comentario_eliminar' comentario.id %}" class="btn btn btn-danger"> 🗑️Eliminar</a>
                                 {% endif %}
                             </footer>
                         {% endif %}

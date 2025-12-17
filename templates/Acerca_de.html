@@ -1,24 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block contenido %}
-
-<body>
-     <div class="acerca-de-nosotros">
-      <h1>Acerca de nosotros</h1>
-        <div style="display:flex">
-          
-          <p> Somos el grupo Nº 1 del Informatorio desarrollamos esta página para el proyecto final nos enfocamos
-          específicamente en un Blog orientado a promocionar noticias o artículos. Básicamente un portal de noticias
-          donde colaboradores de todo el país nos esorzaremos por brindar información relevante para la comunidad.
-          El proyecto está desarrollado en Python y Django.
-        </p>
-        <img src="../assets/img/imagenblog.jpg" 
-          style="height: 400px; width: 400px; align-items: right;" alt="">
-
-        </div>
-        <div class="imagen">
-          <img src="" alt="">
-          <img src="" alt="">
-        </div>
-     </div>
-</body>
+<link rel="stylesheet" href="{% static 'style_acerca.css' %}">
+<div class="acerca-de-nosotros">
+  <h1>Acerca de nosotros</h1>
+  <div class="acerca-flex">
+    <p> Somos el grupo Nº 1 del Informatorio desarrollamos esta página para el proyecto final nos enfocamos
+      específicamente en un Blog orientado a promocionar noticias o artículos. Básicamente un portal de noticias
+      donde colaboradores de todo el país nos esorzaremos por brindar información relevante para la comunidad.
+      El proyecto está desarrollado en Python y Django.
+    </p>
+    <img src="{% static 'img/imagenblog.jpg' %}" alt="Imagen Blog">
+  </div>
+  <div class="integrantes">
+    <div class="integrante">
+      <img src="{% static 'img/FABRICIO.jpg' %}" alt="Fabricio">
+      <p>Fabricio Milanesio</p>
+    </div>
+    <div class="integrante">
+      <img src="{% static 'img/LORENA-SOTELO.jpg' %}" alt="Lorena Sotelo">
+      <p>Lorena Sotelo</p>
+    </div>
+    <div class="integrante">
+      <img src="{% static 'img/DAVID.jpg' %}" alt="David">
+      <p>David Godoy</p>
+    </div>
+    <div class="integrante">
+      <img src="{% static 'img/ESTEBAN-NUÑEZ.jpg' %}" alt="Esteban Nuñez">
+      <p>Esteban Nuñez</p>
+    </div>
+  </div>
+</div>
 {% endblock %}

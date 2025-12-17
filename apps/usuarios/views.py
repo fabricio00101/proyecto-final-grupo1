@@ -7,6 +7,8 @@ from .forms import RegistroForm
 # Create your views here.
 
 def registro(request):
+    if request.user.is_authenticated:
+        return redirect('index')
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():

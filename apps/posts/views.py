@@ -104,7 +104,12 @@ class ComentarioUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         comentario = self.get_object()
-        return self.request.user == comentario.autor
+        # Puede editar si es el autor del comentario, o el autor de la publicación, o superuser
+        return (
+            self.request.user == comentario.autor
+            or self.request.user == comentario.post.autor
+            or self.request.user.is_superuser
+        )
 
     def get_success_url(self):
         return reverse_lazy('publicaciones:detalle', kwargs={'id': self.object.post.id})
@@ -116,18 +121,12 @@ class ComentarioDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         comentario = self.get_object()
-        # Un usuario puede eliminar un comentario si:
-        # 1. Es el autor del comentario Y es Colaborador (puede eliminar sus propios comentarios)
-        # 2. Es el autor de la publicación Y es Colaborador (puede eliminar comentarios en sus publicaciones)
-        # 3. Es superuser (admin tiene permisos totales)
-        
-        es_autor_comentario = self.request.user == comentario.autor
-        es_autor_publicacion = self.request.user == comentario.post.autor
-        es_colaborador = self.request.user.groups.filter(name='Colaborador').exists()
-        es_superuser = self.request.user.is_superuser
-        
-        # Puede eliminar si es superuser, O es autor del comentario (cualquier rol), O es colaborador y autor del post
-        return es_superuser or es_autor_comentario or (es_colaborador and es_autor_publicacion)
+        # Puede eliminar si es el autor del comentario, el autor de la publicación, o superuser
+        return (
+            self.request.user == comentario.autor
+            or self.request.user == comentario.post.autor
+            or self.request.user.is_superuser
+        )
 
     def get_success_url(self):
         return reverse_lazy('publicaciones:detalle', kwargs={'id': self.object.post.id})

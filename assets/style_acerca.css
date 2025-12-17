@@ -1,0 +1,56 @@
+
+.acerca-de-nosotros {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.acerca-de-nosotros h1 {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.acerca-de-nosotros .acerca-flex {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.acerca-de-nosotros .acerca-flex p {
+  flex: 1;
+  font-size: 1.15rem;
+  margin: 0;
+  text-align: justify;
+}
+
+.acerca-de-nosotros .acerca-flex img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid #eee;
+}
+
+.acerca-de-nosotros .integrantes {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.acerca-de-nosotros .integrante {
+  text-align: center;
+}
+
+.acerca-de-nosotros .integrante img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.acerca-de-nosotros .integrante p {
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
