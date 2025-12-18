@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<div class="container mt-4">
+    <h2>Contacto</h2>
+    <p>¿Tienes alguna consulta o sugerencia? ¡Escríbenos!</p>
+    {% if enviado %}
+        <div class="alert alert-success">¡Gracias por contactarnos! Te responderemos pronto.</div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+    <hr>
+    <h4>Otras formas de contacto</h4>
+    <ul>
+        <li>Email: <a href="mailto:informatorio.grupo1@gmail.com">informatorio.grupo1@gmail.com</a></li>
+        <li>Instagram: <a href="https://instagram.com/grupo1_informatorio" target="_blank">@grupo1_informatorio</a></li>
+        <li>Twitter: <a href="https://twitter.com/grupo1_informa" target="_blank">@grupo1_informa</a></li>
+    </ul>
+</div>
+{% endblock %}
